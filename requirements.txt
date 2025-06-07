@@ -1,2 +1,38 @@
-firebase-admin
+# Django and core dependencies
+django>=5.1.1
+python-dotenv>=1.0.0
+
+# Firebase integration
+firebase-admin>=6.2.0
+google-cloud-firestore>=2.11.1
+
+# Payment integrations
+requests>=2.31.0
+
+# Image processing
+Pillow>=10.0.0
+
+# Date/time handling
+pytz>=2023.3
+
+# HTTP utilities
+urllib3>=2.0.4
+certifi>=2023.7.22
+
+# Security
+cryptography>=41.0.3
+
+# Frontend
+django-bootstrap5>=23.3
+django-crispy-forms>=2.0
+
+# Development tools
+black>=23.7.0
+isort>=5.12.0
+flake8>=6.1.0
+
+# Testing
+pytest>=7.4.0
+pytest-django>=4.5.2
+
 
