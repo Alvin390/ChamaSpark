@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+<style>
+.articles-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+    align-items: center;
+}
+
+.article-card {
+    display: flex;
+    width: 90%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.article-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.article-thumbnail {
+    width: 40%;
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.article-content {
+    width: 60%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+<section id="articles" class="section">
+    <div class="container text-center">
+        <h6 class="subtitle">Latest Articles</h6>
+        <h6 class="section-title mb-4">News for Women</h6>
+
+        <div class="articles-container">
+            {% for article in page_obj %}
+                <a href="{{ article.link }}" class="article-card" target="_blank">
+                    <img src="{{ article.image }}" alt="{{ article.title }}" class="article-thumbnail">
+                    <div class="article-content">
+                        <h5 class="article-title">{{ article.title }}</h5>
+                        <p class="article-description">{{ article.headline }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+    {% endif %}
+</div>
+    <!-- {% for article in page_obj %}
+    <!-- article card as before -->
+<!-- {% endfor %}  -->
+
+<!-- Pagination controls -->
+
+
+
+{% endblock %}

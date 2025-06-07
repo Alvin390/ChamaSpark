@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://cdn.jsdelivr.net/npm/tsparticles@3.3.0/tsparticles.bundle.min.js"></script>
+    <link rel="shortcut icon" href="{% static 'images/logo.svg'%}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup, Login & Registration</title>
+    <link rel="stylesheet" href="{% static 'css/css.css' %}">
+</head>
+<body class="signup-page">
+    <div id="spark-loader" style="display:none;">
+    <div id="spark-canvas"></div>
+</div>
+    <div class="overlay">
+        <div class="form-container">
+{#        <h2 id="form-title">Sign Up</h2>#}
+
+            <!-- Signup Form -->
+            <form id="signup-form" method="POST" action="{% url 'sign_up' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2 id="form-title">Sign Up</h2>
+                <div class="input-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" value="{{ signup_form.first_name.value|default:'' }}" required>
+                    <small class="error">{{ signup_form.first_name.errors }}</small>
+                </div>
+                <div class="input-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" value="{{ signup_form.last_name.value|default:'' }}" required>
+                    <small class="error">{{ signup_form.last_name.errors }}</small>
+                </div>
+                <div class="input-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" value="{{ signup_form.phone_number.value|default:'' }}" required>
+                    <small class="error">{{ signup_form.phone_number.errors }}</small>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ signup_form.email.value|default:'' }}" required>
+                    <small class="error">{{ signup_form.email.errors }}</small>
+                </div>
+                <div class="input-group">
+                    <label for="name_of_chama">Name of Chama</label>
+                    <input type="text" id="name_of_chama" name="name_of_chama" value="{{ signup_form.name_of_chama.value|default:'' }}" required>
+                    <small class="error">{{ signup_form.name_of_chama.errors }}</small>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <small class="error">{{ signup_form.password.errors }}</small>
+                </div>
+                <button type="submit" class="btn">Sign Up</button>
+                <p class="toggle-text">Already have an account? <a href="#" class="toggle-to-login">Login</a></p>
+                <p class="toggle-text">New Chama? <a href="#" id="toggle-to-register">Register Here</a></p>
+            </form>
+
+            <!-- Register Chama Form -->
+            <form id="register-form" method="POST" action="{% url 'register' %}" style="display: none;">
+                <h2 id="form-title">Register Chama</h2>
+
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" required>
+                </div>
+                <div class="input-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" required>
+                </div>
+                <div class="input-group">
+                    <label for="name_of_chama">Name of Chama</label>
+                    <input type="text" id="name_of_chama" name="name_of_chama" required>
+                </div>
+                <div class="input-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="id_number">ID Number</label>
+                    <input type="number" id="id_number" name="id_number" required>
+                </div>
+                <div class="input-group">
+                    <label for="county">County</label>
+                    <input type="text" id="county" name="county" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Register</button>
+                <p class="toggle-text">Already have an account? <a href="{% url 'sign_up' %}">Login</a></p>
+            </form>
+
+            <!-- Login Form -->
+            <form id="login-form" method="POST" action="{% url 'login' %}" style="display: none;">
+                <h2 id="form-title">Login</h2>
+                
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <!-- <button type="button" onclick="showSparkLoader()">Test Loader</button> -->
+                <p class="toggle-text">Don't have an account? <a href="#" id="toggle-to-signup">Sign Up</a></p>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    {% if show_login %}
+    // Show login form if login failed
+    var loginForm = document.getElementById("login-form");
+    var signupForm = document.getElementById("signup-form");
+    var registerForm = document.getElementById("register-form");
+    var formTitle = document.getElementById("form-title");
+    if (loginForm && signupForm && registerForm) {
+        loginForm.style.display = "block";
+        signupForm.style.display = "none";
+        registerForm.style.display = "none";
+        if (formTitle) formTitle.innerText = "Login";
+    }
+    {% endif %}
+});
+</script>
+<div id="toast-container" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;"></div>
+
+<script>
+function showToast(message, type="success") {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'custom-toast custom-toast-' + type;
+    // Use string concatenation to avoid Django template parsing issues
+    toast.innerHTML =
+        '<span class="toast-icon">' + (type === "success" ? "&#10003;" : "&#9888;") + '</span>' +
+        '<span>' + message + '</span>';
+    container.appendChild(toast);
+    setTimeout(function() {
+        toast.classList.add('show');
+    }, 100);
+    setTimeout(function() {
+        toast.classList.remove('show');
+        setTimeout(function() {
+            if (container.contains(toast)) container.removeChild(toast);
+        }, 500);
+    }, 3500);
+}
+
+// Django messages integration
+document.addEventListener("DOMContentLoaded", function() {
+    {% if messages %}
+        {% for message in messages %}
+            showToast("{{ message|escapejs }}", "{{ message.tags|default:'success' }}");
+        {% endfor %}
+    {% endif %}
+});
+</script>
+<style>
+.custom-toast {
+    opacity: 0;
+    min-width: 220px;
+    max-width: 350px;
+    margin-bottom: 12px;
+    background: #fff0f6;
+    color: #c2185b;
+    border-left: 6px solid #c2185b;
+    border-radius: 8px;
+    padding: 14px 18px;
+    box-shadow: 0 4px 16px rgba(194,24,91,0.08);
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: opacity 0.5s, transform 0.5s;
+    transform: translateY(40px);
+}
+.custom-toast-success {
+    background: #e8f5e9;
+    color: #388e3c;
+    border-left-color: #388e3c;
+}
+.custom-toast-error, .custom-toast-warning {
+    background: #fff0f6;
+    color: #c2185b;
+    border-left-color: #c2185b;
+}
+.custom-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.toast-icon {
+    font-size: 1.3em;
+    margin-right: 8px;
+}
+</style>
+    <script src="{% static 'js/js.js' %}"></script>
+</body>
+</html>

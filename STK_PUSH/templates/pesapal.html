@@ -1,0 +1,131 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+<style>
+    .image-container {
+        margin-top: 100px; /* Adjust this value as needed */
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="image-container">
+    <a href="{% url 'pesapal' %}">
+        <img src="{% static 'images/pesapal.png' %}" width="300" height="200" class="img-fluid">
+    </a>
+</div>
+<div class="container mt-5">
+    <!-- <h2 class="text-center mb-4">PesaPal Payment</h2> -->
+
+    <div id="alert-container"></div>
+
+    <form id="paymentForm" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="name" class="form-label">Full Name:</label>
+            <input type="text" class="form-control" id="name" required>
+            <div class="invalid-feedback">
+                Please enter your full name.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="email" required>
+            <div class="invalid-feedback">
+                Please enter a valid email address.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone:</label>
+            <input type="text" class="form-control" id="phone" required>
+            <div class="invalid-feedback">
+                Please enter your phone number.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount:</label>
+            <input type="number" class="form-control" id="amount" required>
+            <div class="invalid-feedback">
+                Please enter the amount.
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Contribute with PesaPal</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"></script>
+<script>
+    // Bootstrap validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })();
+
+    document.getElementById("paymentForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let data = {
+            "id": Math.floor(Math.random() * 1000000).toString(),
+            "currency": "KES",
+            "amount": document.getElementById("amount").value,
+            "description": "Test Payment",
+            "callback_url": "{{ callback_url }}",
+            "notification_id": "your_notification_id",
+            "billing_address": {
+                "email_address": document.getElementById("email").value,
+                "phone_number": document.getElementById("phone").value,
+                "first_name": document.getElementById("name").value.split(" ")[0],
+                "last_name": document.getElementById("name").value.split(" ")[1] || ""
+            }
+        };
+
+        fetch("/payments/initiate/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            let alertContainer = document.getElementById("alert-container");
+            if (data.redirect_url) {
+                window.location.href = data.redirect_url; // Redirect to PesaPal checkout
+            } else {
+                alertContainer.innerHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        Payment initiation failed!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            let alertContainer = document.getElementById("alert-container");
+            alertContainer.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Error: ${error.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            console.error("Error:", error);
+        });
+    });
+</script>
+{% endblock %}

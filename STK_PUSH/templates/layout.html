@@ -1,0 +1,220 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@3.3.0/tsparticles.bundle.min.js"></script>
+    <link rel="icon" type="image/x-svg" href="{% static 'images/logo.svg'%}">
+    <link rel="shortcut icon" href="{% static 'images/logo.svg'%}" type="image/x-svg">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Chama System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'vendors/themify-icons/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/steller.css' %}">
+    <link rel="stylesheet" href="{% static 'css/css.css' %}"> <!-- ADD THIS LINE -->
+    {% block extra_head %}{% endblock %}
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+    <!-- Splash Screen -->
+<div id="splash-screen" style="display:none;">
+    <div class="splash-overlay"></div>
+    <div class="splash-content">
+        <img src="{% static 'images/splash.png' %}" alt="Brand" class="splash-logo">
+    </div>
+</div>
+<!-- Spark Loader -->
+<div id="spark-loader" style="display:none;">
+    <div id="spark-canvas"></div>
+</div>
+
+    <!-- Page navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" data-spy="affix" data-offset-top="0">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/brand.svg' %}" alt=""></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'events' %}">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'method' %}">Contribute</a>
+                    </li>                   
+                    <li class="nav-item">
+                        <a class="btn btn-primary rounded ml-4" href="{% url 'admin_login' %}">Admin</a>
+                    </li>
+                    <li>
+                        <form method="post" action="{% url 'user_logout' %}" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit" style="background: none; border: none; color: black; cursor: pointer; padding: 20px;">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>          
+    </nav>
+    
+    {% block body %}
+    {% endblock %}
+
+    <!-- Page Footer -->
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <p>Copyright <script>document.write(new Date().getFullYear())</script> &copy; <a href="http://www.devcrud.com" target="_blank">Team Disruptors</a></p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="socials">
+                        <a class="social-item" href="javascript:void(0)"><i class="ti-facebook"></i></a>
+                        <a class="social-item" href="javascript:void(0)"><i class="ti-google"></i></a>
+                        <a class="social-item" href="javascript:void(0)"><i class="ti-github"></i></a>
+                        <a class="social-item" href="javascript:void(0)"><i class="ti-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer> 
+    <!-- End of page footer -->
+    
+    <!-- core  -->
+    <script src="{% static 'vendors/jquery/jquery-3.4.1.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap/bootstrap.bundle.js' %}"></script>
+    <!-- bootstrap 3 affix -->
+    <script src="{% static 'vendors/bootstrap/bootstrap.affix.js' %}"></script>
+
+    <!-- steller js -->
+    <script src="{% static 'assets/js/steller.js' %}"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'vendors/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'vendors/popper/popper.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    {% block extra_scripts %}
+    {% endblock %}
+    <!-- Toast Container -->
+<div id="toast-container"></div>
+
+<script>
+function showToast(message, type="success") {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'custom-toast custom-toast-' + type;
+    // Use a warning icon for "fine"
+    let icon = "&#10003;"; // checkmark
+    if (type === "error" || type === "warning") icon = "&#9888;"; // warning
+    if (type === "fine") icon = "&#128221;"; // receipt icon (or use "&#9888;" for warning)
+    toast.innerHTML =
+        '<span class="toast-icon">' + icon + '</span>' +
+        '<span>' + message + '</span>';
+    container.appendChild(toast);
+    setTimeout(function() {
+        toast.classList.add('show');
+    }, 100);
+    setTimeout(function() {
+        toast.classList.remove('show');
+        setTimeout(function() {
+            if (container.contains(toast)) container.removeChild(toast);
+        }, 500);
+    }, 3500);
+}
+
+// Django messages integration
+document.addEventListener("DOMContentLoaded", function() {
+    {% if messages %}
+        {% for message in messages %}
+            showToast("{{ message|escapejs }}", "{{ message.tags|default:'success' }}");
+        {% endfor %}
+    {% endif %}
+});
+</script>
+<style>
+    #toast-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    z-index: 20000;
+    pointer-events: none; /* So clicks pass through */
+}
+.custom-toast {
+    opacity: 0;
+    min-width: 220px;
+    max-width: 350px;
+    margin-bottom: 12px;
+    background: #fff0f6;
+    color: #c2185b;
+    border-left: 6px solid #c2185b;
+    border-radius: 8px;
+    padding: 14px 18px;
+    box-shadow: 0 4px 16px rgba(194,24,91,0.08);
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: opacity 0.5s, transform 0.5s;
+    /* transform: translateY(40px); */
+}
+.custom-toast-success {
+    background: #e8f5e9;
+    color: #388e3c;
+    border-left-color: #388e3c;
+}
+.custom-toast-error, .custom-toast-warning {
+    background: #fff0f6;
+    color: #c2185b;
+    border-left-color: #c2185b;
+}
+.custom-toast.show {
+    opacity: 1;
+    /* transform: translateY(0); */
+}
+.toast-icon {
+    font-size: 1.3em;
+    margin-right: 8px;
+}
+.custom-toast-fine {
+    background: #fff3cd;
+    color: #b26a00;
+    border-left: 8px solid #ff9800;
+    border-radius: 12px;
+    font-weight: bold;
+    box-shadow: 0 8px 32px rgba(255,152,0,0.18);
+    text-align: center;
+    min-width: 260px;
+    max-width: 420px;
+    left: 50%;
+    bottom: 40px;
+    margin: 0;
+    transform: translateX(-50%);
+    position: fixed;
+    z-index: 20001;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 24px;
+    font-size: 1.15rem;
+    transition: opacity 0.5s, transform 0.5s;
+    opacity: 0;
+    pointer-events: auto;
+}
+.custom-toast-fine.show {
+    opacity: 1;
+}
+.custom-toast-fine .toast-icon {
+    font-size: 1.5em;
+    color: #ff9800;
+    margin-right: 10px;
+}
+</style>
+<script src="{% static 'js/js.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+{% block extra_head %}
+<style>
+  h1 {
+      text-align: center;
+      color: darkred;
+  }
+  body {
+      background-color: white;
+      padding: 20px;
+  }
+  form {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      background-color: lightpink;
+      padding: 20px;
+      background-color: rgba(100, 100, 255, 0.2);
+      border-radius: 10px;
+      margin: auto;
+      margin-top: 100px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  label {
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-style: italic;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  input {
+      padding: 5px;
+      margin-bottom: 10px;
+  }
+  button {
+      padding: 10px;
+      background: plum;
+      color: orangered;
+      border: none;
+      cursor: pointer;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<h1>Admin Sign In</h1>
+
+
+
+<form id="admin-login-form" method="POST" action="{% url 'admin_login' %}">
+    {% csrf_token %}
+    <div class="input-group">
+        <label for="first_name">First Name</label>
+        <input type="text" id="first_name" name="first_name" required>
+    </div>
+    <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div class="input-group">
+        <label for="phone_number">Phone Number</label>
+        <input type="text" id="phone_number" name="phone_number" required>
+    </div>
+    <div class="input-group">
+        <label for="name_of_chama">Name Of Chama</label>
+        <input type="text" id="name_of_chama" name="name_of_chama" required>
+    </div>
+    <button type="submit" style="background-color: darkkhaki">Sign In</button>
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,581 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+    <title>Admin Dashboard</title>
+    <!-- Flatpickr CSS (with a custom theme for a feminine, bold look) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_red.css">
+<style>
+/* Custom tweaks for a bold, feminine look */
+.flatpickr-calendar {
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(255, 105, 180, 0.18);
+    border: 2px solid #ff69b4;
+}
+.flatpickr-months .flatpickr-month {
+    color: #b71c1c;
+    font-weight: bold;
+}
+.flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected:active, .flatpickr-day.startRange:active, .flatpickr-day.endRange:active {
+    background: #ff69b4;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+}
+.flatpickr-day.today {
+    border-color: #ff69b4;
+    color: #ff69b4;
+    font-weight: bold;
+}
+</style>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            margin: 0 auto;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input {
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px;
+            background: orangered;
+            color: beige;
+            border: none;
+            cursor: pointer;
+        }
+        body {
+            margin: 0;
+            font-family: 'Ubuntu', sans-serif;
+            display: flex;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            width: 250px;
+            background: orangered;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+        }
+        .sidebar h2 {
+            text-align: center;
+            font-weight: bold;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 10px;
+            border-bottom: 1px solid #d1d1d1;
+            cursor: pointer;
+        }
+        .sidebar ul li:hover {
+            background: orangered;
+        }
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            padding: 20px;
+        }
+        .navbar {
+            background: #e9ecef;
+            padding: 10px;
+            text-align: right;
+            border-bottom: 2px solid orangered;
+        }
+        .cards {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background: orangered;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        .image-button {
+            background: url("{% static 'images/fine.png' %}") no-repeat center center;
+            background-size: contain;
+            width: 150px;
+            height: 150px;
+            border: none;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease-in-out;
+            padding: 0px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        .image-button:hover {
+            box-shadow: 0 0 20px red;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            background-color: orangered;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: orangered;
+        }
+        .welcome-title {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: orangered;
+        }
+        .add-meeting-form {
+            margin-top: 40px;
+        }
+        .existing-articles {
+            margin-top: 40px;
+        }
+        .articles-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: center;
+}
+.article-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(255,105,180,0.08);
+    width: 320px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s;
+    position: relative;
+}
+.article-card:hover {
+    box-shadow: 0 8px 32px rgba(255,105,180,0.18);
+}
+.article-thumbnail {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+.article-content {
+    padding: 16px;
+    width: 100%;
+    text-align: left;
+}
+.delete-article-btn {
+    background: none;
+    border: none;
+    color: #ff69b4;
+    font-size: 1.5rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.delete-article-btn:hover {
+    color: #b71c1c;
+}
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul>
+        <li>
+            <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; color: white; cursor: pointer; padding: 60px;">Logout</button>
+            </form>
+        </li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="navbar">
+        Welcome, Chairlady
+    </div>
+    <div class="welcome-title">
+        Welcome, Chairlady
+    </div>
+
+    <!-- Cards Section -->
+    <!-- <div class="cards">
+        <div class="card">
+            <h3>Users</h3>
+            <p>{{ chama.members.count }}</p>
+        </div>
+        <div class="card">
+            <h3>Revenue</h3>
+            <p>$5000</p>
+        </div>
+        <div class="card">
+            <h3>Events</h3>
+            <p>120</p>
+        </div>
+    </div> -->
+
+    <!-- Add Article Form -->
+    <!-- <div class="add-article-form">
+        <h1 class="text-center m-4 bg-info"> Add Article </h1>
+        <form id="add-article-form" method="post" action="{% url 'articles' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Article Title</label>
+                <input type="text" id="title" name="title" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="headline">Headline</label>
+                <input type="text" id="headline" name="headline" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="link">Article Link</label>
+                <input type="url" id="link" name="link" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Article Image</label>
+                <input type="file" id="image" name="image" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Article</button>
+        </form>
+    </div> -->
+    <!-- Scheduled Article Form -->
+<div class="add-scheduled-article-form">
+    <h1 class="text-center m-4 bg-info">Schedule Article</h1>
+    <form id="schedule-article-form" method="post" action="{% url 'schedule_article' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="scheduled-title">Article Title</label>
+            <input type="text" id="scheduled-title" name="title" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="scheduled-headline">Headline</label>
+            <input type="text" id="scheduled-headline" name="headline" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="scheduled-link">Article Link</label>
+            <input type="url" id="scheduled-link" name="link" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="scheduled-image">Article Image</label>
+            <input type="file" id="scheduled-image" name="image" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="scheduled-date">Scheduled Date</label>
+            <input type="text" id="scheduled-date" name="scheduled_date" class="form-control" required placeholder="Pick a date">
+        </div>
+        <button type="submit" class="btn btn-primary">Schedule Article</button>
+    </form>
+</div>
+<div class="article-filter-section">
+    <label for="filter-date" style="font-weight:bold;">View Articles for:</label>
+    <input type="text" id="filter-date" class="form-control" style="display:inline-block; width:auto;" />
+</div>
+<div id="articles-list" class="articles-list"></div>
+
+
+<!-- Example card structure for JS rendering -->
+<div class="article-card" data-id="{{ article.id }}">
+    <img src="{{ article.image }}" alt="{{ article.title }}" class="article-thumbnail">
+    <div class="article-content">
+        <h5>{{ article.title }}</h5>
+        <p>{{ article.headline }}</p>
+        <a href="{{ article.link }}" target="_blank">Read More</a>
+        <button class="delete-article-btn" data-id="{{ article.id }}" title="Delete">
+            <i class="ti-trash"></i>
+        </button>
+    </div>
+</div>
+
+    <!-- Existing Articles -->
+    <!-- <div class="existing-articles">
+        <h2>Existing Articles</h2>
+        <ul>
+            {% for article in articles %}
+                <li>{{ article.title }} - <a href="{{ article.link }}" target="_blank">View</a></li>
+            {% endfor %}
+        </ul>
+    </div> -->
+
+    <!-- Payment Form -->
+    <div class="form-container">
+        <h2 style="text-align: center; font-size: 24px; font-weight: bold; color: #6f42c1; margin-bottom: 20px;">FINING AMENITIES</h2>
+        <form id="fine-form" method="POST" action="{% url 'pay' %}">
+            {% csrf_token %}
+            <label class="form-label mt-5">Phone Number</label>
+            <input type="number" name="phone" value="254" class="form-control">
+            <label class="form-label mt-5">Amount</label>
+            <input type="number" name="amount" class="form-control">
+            <button type="submit" class="image-button"></button>
+        </form>
+    </div>
+
+    <!-- Add Meeting Form -->
+    <div class="add-meeting-form">
+        <h1 class="text-center m-4 bg-info"> Add Meeting </h1>
+        <form id="add-meeting-form" method="post" action="{% url 'add_meeting' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="meeting-venue">Meeting Venue</label>
+                <input type="text" class="form-control" id="meeting-venue" name="venue" required>
+            </div>
+            <div class="form-group">
+                <label for="meeting-date">Meeting Date</label>
+                <input type="date" class="form-control" id="meeting-date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="meeting-time">Meeting Time</label>
+                <input type="time" class="form-control" id="meeting-time" name="time" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+<!-- Fine Success Modal -->
+<div id="fine-success-modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); justify-content:center; align-items:center;">
+    <div class="modal-content" style="background:#fff3cd; border-left:8px solid #ff9800; border-radius:12px; padding:2rem 2.5rem; box-shadow:0 8px 32px rgba(255,152,0,0.18); text-align:center; max-width:400px;">
+        <h4 id="fine-modal-title" style="color:#b71c1c; margin-bottom:1rem;">Fine Issued!</h4>
+        <p id="fine-modal-message" style="color:#b26a00; font-weight:bold;"></p>
+        <button class="close-btn" onclick="closeFineModal()" style="margin-top:1.5rem; padding:0.5rem 1.5rem; background:#ff9800; color:#fff; border:none; border-radius:6px; font-size:1rem; cursor:pointer;">OK</button>
+    </div>
+</div>
+<script src="{% static 'js/js.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const fineForm = document.getElementById('fine-form');
+    if (fineForm) {
+        fineForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phone = fineForm.elements['phone'].value;
+            const amount = fineForm.elements['amount'].value;
+            fetch("{% url 'pay' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({ phone, amount })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showFineModal(amount);
+                } else {
+                    alert(data.message || "Failed to fine member.");
+                }
+            })
+            .catch(() => {
+                alert("An error occurred.");
+            });
+        });
+    }
+});
+function showFineModal(amount) {
+    document.getElementById('fine-modal-title').innerText = "Fine Issued!";
+    document.getElementById('fine-modal-message').innerText = "Member has been fined Ksh " + amount + " for disregard of rules.";
+    document.getElementById('fine-success-modal').style.display = 'flex';
+}
+function closeFineModal() {
+    document.getElementById('fine-success-modal').style.display = 'none';
+}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const meetingForm = document.getElementById('add-meeting-form');
+    if (meetingForm) {
+        meetingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(meetingForm);
+            fetch("{% url 'add_meeting' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message || "Meeting added successfully!", "success");
+                    // Optionally, update the meetings list dynamically here
+                } else {
+                    showToast(data.message || "Failed to add meeting.", "error");
+                }
+            })
+            .catch(() => {
+                showToast("An error occurred.", "error");
+            });
+        });
+    }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const articleForm = document.getElementById('add-article-form');
+    if (articleForm) {
+        articleForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(articleForm);
+            fetch("{% url 'articles' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message || "Article added successfully!", "success");
+                    articleForm.reset();
+                    // Optionally, reload articles list dynamically here
+                    // reloadArticles();
+                } else {
+                    showToast(data.message || "Failed to add article.", "error");
+                }
+            })
+            .catch(() => {
+                showToast("An error occurred.", "error");
+            });
+        });
+    }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const scheduleForm = document.getElementById('schedule-article-form');
+    if (scheduleForm) {
+        scheduleForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(scheduleForm);
+            fetch("{% url 'schedule_article' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message || "Article scheduled successfully!", "success");
+                    scheduleForm.reset();
+                } else {
+                    showToast(data.message || "Failed to schedule article.", "error");
+                }
+            })
+            .catch(() => {
+                showToast("An error occurred.", "error");
+            });
+        });
+    }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    flatpickr("#scheduled-date", {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        allowInput: true,
+        animate: true,
+        disableMobile: true // Always use the custom picker, not native
+    });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize Flatpickr for filtering
+    flatpickr("#filter-date", {
+        dateFormat: "Y-m-d",
+        defaultDate: new Date(),
+        onChange: function(selectedDates, dateStr) {
+            fetchArticles(dateStr);
+        }
+    });
+
+    // Initial load for today
+    fetchArticles(flatpickr.formatDate(new Date(), "Y-m-d"));
+
+    function fetchArticles(dateStr) {
+        fetch(`/get_articles_by_date/?date=${dateStr}`)
+            .then(response => response.json())
+            .then(data => {
+                renderArticles(data.articles);
+            });
+    }
+
+    function renderArticles(articles) {
+        const container = document.getElementById('articles-list');
+        container.innerHTML = '';
+        if (articles.length === 0) {
+            container.innerHTML = '<p style="text-align:center;color:#888;">No articles for this day.</p>';
+            return;
+        }
+        articles.forEach(article => {
+            const card = document.createElement('div');
+            card.className = 'article-card';
+            card.setAttribute('data-id', article.id);
+            card.innerHTML = `
+                <img src="${article.image}" alt="${article.title}" class="article-thumbnail">
+                <div class="article-content">
+                    <h5>${article.title}</h5>
+                    <p>${article.headline}</p>
+                    <a href="${article.link}" target="_blank">Read More</a>
+                    <button class="delete-article-btn" data-id="${article.id}" title="Delete">
+                        <i class="ti-trash"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+        // Attach delete handlers
+        document.querySelectorAll('.delete-article-btn').forEach(btn => {
+            btn.onclick = function() {
+                const articleId = this.getAttribute('data-id');
+                if (confirm('Delete this article?')) {
+                    fetch("{% url 'delete_article' %}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `article_id=${articleId}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast("Article deleted!", "success");
+                            document.querySelector(`.article-card[data-id="${articleId}"]`).remove();
+                        } else {
+                            showToast("Failed to delete article.", "error");
+                        }
+                    });
+                }
+            }
+        });
+    }
+});
+</script>
+
+{% endblock %}

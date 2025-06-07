@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+<style>
+    .payment-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        text-align: center;
+        background: #fff;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+    .payment-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .payment-card img {
+        max-width: 100%;
+        height: auto;
+        width: 200px;
+        margin-bottom: 25px;
+    }
+    .payment-card .btn {
+        width: 90%;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 10px 0; /* Reduced height */
+        font-size: 1.2rem; /* Slightly smaller text */
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="row gy-5 gx-5 justify-content-center align-items-stretch">
+        <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+            <div class="payment-card w-100">
+                <img src="{% static 'images/Mpesa-Logo.png' %}" alt="M-Pesa">
+                <a href="{% url 'MPESA' %}" class="btn btn-success btn-lg">Pay with M-Pesa</a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+            <div class="payment-card w-100">
+                <img src="{% static 'images/pesapal.png' %}" alt="Pesapal">
+                <a href="{% url 'pesapal' %}" class="btn btn-primary btn-lg">Contribute with Pesapal</a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+            <div class="payment-card w-100">
+                <img src="{% static 'images/paypal.png' %}" alt="PayPal">
+                <a href="{% url 'paypal' %}" class="btn btn-info btn-lg">Subscribe with PayPal</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

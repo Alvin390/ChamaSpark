@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+<style>
+    .card-container {
+        margin-top: 100px; /* Adjust this value as needed to move the cards lower */
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container card-container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" style="width: 18rem;">
+                <img src="{% static 'images/meeting.jpg' %}" class="card-img-top" alt="meeting">
+                <div class="card-body">
+                    <h5 class="card-title">Meetings</h5>
+                    <p class="card-text">Check the next meeting.</p>
+                    <a href="{% url 'meetings' %}" class="btn btn-primary">Meetings</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card" style="width: 18rem;">
+                <img src="{% static 'images/upcoming.png' %}" class="card-img-top" alt="upcoming">
+                <div class="card-body">
+                    <h5 class="card-title">Upcoming Events</h5>
+                    <p class="card-text">Check upcoming planned events.</p>
+                    <a href="{% url 'calendar' %}" class="btn btn-primary">Upcoming !!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

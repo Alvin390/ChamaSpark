@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block body %}
+<div class="meeting-info card shadow-lg p-4 mb-5 bg-white rounded" style='margin-top: 100px;'>
+    <h2 class="text-center text-primary ">Chama Meeting</h2>
+    <p class="lead text-center">Welcome to our monthly women's group meeting. This month, we will be gathering at:</p>
+{% for meeting in meetings %}
+    <div>
+        <p><strong>Venue:</strong> {{ meeting.venue }}</p>
+        <p><strong>Date:</strong> {{ meeting.date }}</p>
+        <p><strong>Time:</strong> {{ meeting.time }}</p>
+    </div>
+{% empty %}
+    <p>No meetings found.</p>
+{% endfor %}
+</div>
+{% endblock %}

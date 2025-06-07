@@ -1,0 +1,118 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+<style>
+    .image-container {
+        margin-top: 100px;
+    }
+    .form-container {
+        margin-top: -20px;
+    }
+    /* Popup modal styles */
+    #mpesa-success-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0; top: 0; width: 100vw; height: 100vh;
+        background: rgba(0,0,0,0.4);
+        justify-content: center;
+        align-items: center;
+    }
+    #mpesa-success-modal .modal-content {
+        background: #fff;
+        border-radius: 12px;
+        padding: 2rem 2.5rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        text-align: center;
+        max-width: 400px;
+        margin: auto;
+    }
+    #mpesa-success-modal .modal-content h4 {
+        color: #4caf50;
+        margin-bottom: 1rem;
+    }
+    #mpesa-success-modal .close-btn {
+        margin-top: 1.5rem;
+        padding: 0.5rem 1.5rem;
+        background: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="image-container">
+    <a href="{% url 'MPESA' %}">
+        <img src="{% static 'images/Mpesa-Logo.png' %}" width="300" height="200" class="img-fluid">
+    </a>
+</div>
+<div class="container mt-5 form-container">
+    <div class="row">
+        <div class="col-md-5">
+            <form id="mpesa-form" method="POST" action="{% url 'pay' %}">
+                {% csrf_token %}
+                <label class="form-label mt-5">Phone Number</label>
+                <input type="number" name="phone" value="254" class="form-control">
+                <label class="form-label mt-5">Amount</label>
+                <input type="number" name="amount" class="form-control">
+                <input type="submit" name="submit" class="form-control mt-5 btn btn-success" value="Contribute">
+            </form>
+        </div>
+        <div class="col-md-7">
+            <!-- Additional content can go here -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal Popup -->
+<div id="mpesa-success-modal">
+    <div class="modal-content">
+        <h4 id="mpesa-modal-title"></h4>
+        <p id="mpesa-modal-message"></p>
+        <button class="close-btn" onclick="closeMpesaModal()">OK</button>
+    </div>
+</div>
+
+<script>
+function showMpesaModal(title, message) {
+    document.getElementById('mpesa-modal-title').innerText = title;
+    document.getElementById('mpesa-modal-message').innerText = message;
+    document.getElementById('mpesa-success-modal').style.display = 'flex';
+}
+function closeMpesaModal() {
+    document.getElementById('mpesa-success-modal').style.display = 'none';
+}
+
+document.getElementById('mpesa-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let form = e.target;
+    let formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showMpesaModal("Success!", data.message);
+            form.reset();
+        } else {
+            showMpesaModal("Error", data.message || "Failed to initiate STK Push.");
+        }
+    })
+    .catch(() => {
+        showMpesaModal("Error", "An unexpected error occurred.");
+    });
+});
+</script>
+{% endblock %}

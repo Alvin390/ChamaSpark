@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+<style>
+  /* Center the PayPal button container without shrinking */
+  .paypal-button-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh; /* Centers vertically */
+  }
+
+  #paypal-button-container-P-41A80744K85616538M7JVPAQ {
+      min-width: 500px; /* Ensures it doesn't shrink */
+      max-width: 600px; /* Adjust as needed */
+      width: 100%; /* Allows for responsiveness */
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="paypal-button-wrapper">
+  <div id="paypal-button-container-P-41A80744K85616538M7JVPAQ"></div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=AV1B3_ZN1W_kP2Dkw00lLQrEQpzFiG3PQLgO-rwNWkLiiZLcWN1P0Q-8md83eNiDdkoQ3ETYHXgHngsv&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+<script>
+paypal.Buttons({
+    style: {
+        shape: 'rect',
+        color: 'gold',
+        layout: 'vertical',
+        label: 'subscribe'
+    },
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({
+        /* Creates the subscription */
+        plan_id: 'P-41A80744K85616538M7JVPAQ'
+      });
+    },
+    onApprove: function(data, actions) {
+      alert(data.subscriptionID); // Optional success message
+    }
+}).render('#paypal-button-container-P-41A80744K85616538M7JVPAQ'); // Renders the PayPal button
+</script>
+{% endblock %}
