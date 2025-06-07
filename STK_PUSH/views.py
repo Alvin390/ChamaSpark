@@ -264,7 +264,7 @@ def sign_up(request):
         if form.is_valid():
             firestore_service.create_signup(form.cleaned_data)
             messages.success(request, "Sign up successful!")
-            return redirect('sign_up')
+            return redirect('home')
     else:
         form = SignUpForm()
     return render(request, 'sign up.html', {'signup_form': form})
@@ -275,7 +275,7 @@ def register(request):
         if form.is_valid():
             firestore_service.create_register_chama(form.cleaned_data)
             messages.success(request, "Registration successful!")
-            return redirect('register')
+            return redirect('home')
     else:
         form = RegisterChamaForm()
     return render(request, 'sign up.html', {'register_form': form})
