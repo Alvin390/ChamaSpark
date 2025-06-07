@@ -262,7 +262,7 @@ def sign_up(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            firestore_service.create_sign_up(form.cleaned_data)
+            firestore_service.create_signup(form.cleaned_data)
             messages.success(request, "Sign up successful!")
             return redirect('sign_up')
     else:
