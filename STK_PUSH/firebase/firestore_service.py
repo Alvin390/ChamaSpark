@@ -1,9 +1,10 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
+from django.conf import settings
 
 # Initialize Firebase Admin SDK
 if not firebase_admin._apps:
-    cred = credentials.Certificate('c:/Users/USER/Desktop/SCHOOL PROJECTS/Chama Firebase 1/Wamama_Chama_System/serviceAccountKey.json')
+    cred = credentials.Certificate(str(settings.FIREBASE_CREDENTIALS))
     firebase_admin.initialize_app(cred)
 
 

@@ -3,6 +3,7 @@ from pathlib import Path
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
+FIREBASE_CREDENTIALS = BASE_DIR / 'serviceAccountKey.json'
 
 SECRET_KEY = 'django-insecure-please-change-this-key'
 
