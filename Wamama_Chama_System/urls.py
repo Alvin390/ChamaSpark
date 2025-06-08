@@ -20,4 +20,5 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('STK_PUSH.urls')),
+    path('sparkgal/', include('SparkGal.urls')),
 ]

@@ -1,0 +1,23 @@
+{% load static %}
+<div id="sparkgal-fab">
+    <img src="{% static 'images/SparkGal_Icon.png' %}" alt="Spark Gal" class="sparkgal-icon">
+    <span class="sparkgal-label">Spark Gal</span>
+</div>
+<div id="sparkgal-modal" class="sparkgal-modal">
+    <div class="sparkgal-phone">
+        <div class="sparkgal-header">
+            <img src="{% static 'images/SparkGal_Icon.png' %}" class="sparkgal-header-icon" alt="Spark Gal">
+            <span class="sparkgal-header-title">Spark Gal</span>
+            <button class="sparkgal-close">&times;</button>
+        </div>
+        <div class="sparkgal-chat-body" id="sparkgal-chat-body"></div>
+        <div class="sparkgal-typing" id="sparkgal-typing" style="display:none;">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="typing-text">Spark Gal is typing...</span>
+        </div>
+        <form id="sparkgal-chat-form" autocomplete="off">
+            <input type="text" id="sparkgal-input" placeholder="Type your message..." autocomplete="off" required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</div>

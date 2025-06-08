@@ -1,0 +1,285 @@
+/* Blur everything except modal, fab, and fab children */
+body.sparkgal-blur #sparkgal-modal,
+body.sparkgal-blur #sparkgal-fab {
+    filter: none !important;
+    pointer-events: auto;
+    user-select: auto;
+}
+body.sparkgal-blur :not(#sparkgal-modal):not(#sparkgal-fab):not(#sparkgal-fab *):not(script):not(style) {
+    filter: blur(5px) !important;
+    transition: filter 0.3s;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Floating Button: white circle with icon centered */
+#sparkgal-fab {
+    position: fixed;
+    bottom: 45px;
+    right: 32px;
+    z-index: 9999;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: box-shadow 0.3s, transform 0.2s;
+    overflow: visible;
+}
+
+#sparkgal-fab:hover {
+    box-shadow: 0 8px 32px rgba(233,30,99,0.25), 0 2px 8px rgba(0,0,0,0.10);
+    transform: scale(1.07);
+}
+
+/* Icon stays centered in the circle */
+.sparkgal-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+/* Label: absolutely positioned to the left, slides out from right to left, no background */
+.sparkgal-label {
+    position: absolute;
+    right: 100%; /* Place label to the left of the button */
+    top: 50%;
+    transform: translateY(-50%) translateX(40px); /* Start hidden to the right */
+    opacity: 0;
+    font-weight: bold;
+    color: #e91e63;
+    font-size: 1.3em;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+#sparkgal-fab:hover .sparkgal-label {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0); /* Slide left into view */
+}
+
+/* Modal Slide Up Animation */
+.sparkgal-modal {
+    display: none;
+    align-items: flex-end;
+    justify-content: flex-end;
+    position: fixed;
+    z-index: 10000;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.18);
+    pointer-events: none;
+    transition: background 0.3s;
+}
+.sparkgal-modal.active {
+    display: flex;
+    pointer-events: all;
+    background: rgba(0,0,0,0.32);
+}
+.sparkgal-phone {
+    background: #fff;
+    border-radius: 36px;
+    border: 4px solid #e0e0e0;
+    width: 370px;
+    max-width: 95vw;
+    height: 600px;
+    box-shadow: 0 12px 48px rgba(233,30,99,0.18), 0 2px 8px rgba(0,0,0,0.10);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: absolute;
+    right: 40px;
+    bottom: 40px; /* Lowered to be closer to the button */
+    transform: translateY(120%);
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(.4,2,.6,1), opacity 0.3s;
+}
+.sparkgal-modal.active .sparkgal-phone {
+    transform: translateY(0);
+    opacity: 1;
+}
+/* Header */
+.sparkgal-header {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(90deg, #e91e63 60%, #f06292 100%);
+    color: #fff;
+    padding: 16px 20px;
+    font-size: 1.2em;
+    border-bottom: 1px solid #f8bbd0;
+}
+.sparkgal-header-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    margin-right: 14px;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.18);
+}
+.sparkgal-header-title {
+    flex: 1;
+    font-weight: bold;
+    font-size: 1.1em;
+    letter-spacing: 1px;
+}
+.sparkgal-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2em;
+    cursor: pointer;
+    margin-left: 8px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.sparkgal-close:hover {
+    opacity: 1;
+}
+
+/* Chat Body */
+.sparkgal-chat-body {
+    flex: 1;
+    padding: 18px 10px 10px 10px;
+    overflow-y: auto;
+    background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Chat Bubbles with Icons */
+.sparkgal-message-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+.sparkgal-message-row.user {
+    flex-direction: row-reverse;
+}
+.sparkgal-bubble {
+    max-width: 72%;
+    padding: 12px 18px;
+    border-radius: 18px 18px 6px 18px;
+    font-size: 1.08em;
+    line-height: 1.5;
+    position: relative;
+    word-break: break-word;
+    background: #e1f5fe;
+    color: #333;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.sparkgal-message-row.user .sparkgal-bubble {
+    background: #e1f5fe;
+    color: #333;
+    border-radius: 18px 18px 18px 6px;
+}
+.sparkgal-message-row.ai .sparkgal-bubble {
+    background: #fce4ec;
+    color: #e91e63;
+    border-radius: 18px 18px 6px 18px;
+}
+.sparkgal-message-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    object-fit: cover;
+}
+.sparkgal-timestamp {
+    font-size: 0.85em;
+    color: #aaa;
+    margin-top: 2px;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+/* Typing Indicator */
+.sparkgal-typing {
+    display: flex;
+    align-items: center;
+    margin: 0 0 8px 0;
+    padding-left: 8px;
+}
+.sparkgal-typing .dot {
+    width: 8px;
+    height: 8px;
+    margin-right: 3px;
+    background: #e91e63;
+    border-radius: 50%;
+    display: inline-block;
+    animation: sparkgal-dot 1s infinite alternate;
+}
+.sparkgal-typing .dot:nth-child(2) { animation-delay: 0.2s; }
+.sparkgal-typing .dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes sparkgal-dot {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+.sparkgal-typing .typing-text {
+    margin-left: 10px;
+    color: #888;
+    font-size: 0.98em;
+}
+
+/* Feedback */
+.sparkgal-feedback {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    margin-left: 44px;
+}
+.sparkgal-feedback button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #e91e63;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.sparkgal-feedback button:hover {
+    opacity: 1;
+}
+
+/* Chat Form */
+#sparkgal-chat-form {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #fff;
+    border-top: 1px solid #f8bbd0;
+}
+#sparkgal-input {
+    flex: 1;
+    border: none;
+    border-radius: 18px;
+    padding: 10px 16px;
+    font-size: 1.08em;
+    background: #f3e5f5;
+    margin-right: 10px;
+    outline: none;
+    transition: background 0.2s;
+}
+#sparkgal-input:focus {
+    background: #fff;
+}
+#sparkgal-chat-form button {
+    background: #e91e63;
+    color: #fff;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 18px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#sparkgal-chat-form button:hover {
+    background: #ad1457;
+}

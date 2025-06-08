@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'STK_PUSH',
+    'SparkGal',
 ]
 
 MIDDLEWARE = [
@@ -102,3 +104,7 @@ CALLBACK_URL = os.environ.get('CALLBACK_URL', 'http://127.0.0.1:8000/')
 
 # Firebase credentials path (update if needed)
 FIREBASE_CREDENTIALS = BASE_DIR / 'serviceAccountKey.json'
+
+
+#OPENAI API Key
+OPENAI_API_KEY = config('OPENAI_API_KEY')
