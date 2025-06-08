@@ -12,6 +12,89 @@
     <link rel="stylesheet" href="{% static 'css/steller.css' %}">
     <link rel="stylesheet" href="{% static 'css/css.css' %}"> <!-- ADD THIS LINE -->
     {% block extra_head %}{% endblock %}
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8bbd0 0%, #ffe3ec 50%, #fce4ec 100%);
+        }
+        .nav-btn-card {
+            display: inline-block;
+            background: linear-gradient(120deg, #ffe3ec 60%, #fff 100%);
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(231, 115, 153, 0.10);
+            padding: 4px 0;
+            margin-left: 12px;
+            margin-right: 0;
+        }
+        .btn-admin, .btn-logout {
+            border-radius: 14px !important;
+            box-shadow: none !important;
+            outline: none !important;
+            border: none !important;
+            font-weight: 600;
+            font-size: 0.98rem;         /* Reduced font size */
+            padding: 4px 14px;          /* Reduced padding */
+            margin: 0;
+            min-width: 0;
+            display: inline-block;
+            white-space: normal;        /* Allow text to wrap */
+            word-break: break-word;     /* Break long words if needed */
+            line-height: 1.2;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s, font-size 0.2s;
+        }
+        .btn-admin {
+            background: #1976d2 !important;
+            color: #fff !important;
+        }
+        .btn-admin:hover {
+            background: #125ea2 !important;
+        }
+        .btn-logout {
+            background: #e57399 !important;
+            color: #fff !important;
+            font-size: 0.95rem;
+            padding: 6px 18px;
+        }
+        .btn-logout:focus,
+        .btn-logout:active {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .nav-link {
+            transition: color 0.2s, background 0.2s, box-shadow 0.2s, font-size 0.2s;
+            border-radius: 12px;
+            padding: 6px 18px;
+            font-size: 1.18rem; /* Slightly increased font size */
+        }
+
+        .nav-link:hover,
+        .nav-link:focus {
+            color: #fff !important;
+            background: linear-gradient(120deg, #e57399 60%, #f8bbd0 100%);
+            box-shadow: 0 2px 12px rgba(231, 115, 153, 0.13);
+            text-decoration: none;
+            font-size: 1.28rem; /* Slightly larger on hover */
+        }
+        .page-footer {
+            background: linear-gradient(90deg, rgba(255,255,255,0.85) 60%, rgba(248,187,208,0.85) 100%);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            border-top: none;
+            box-shadow: 0 -2px 16px rgba(231, 115, 153, 0.08);
+            color: #b71c4a;
+            margin-top: 0;
+            padding: 32px 0 18px 0;
+            font-size: 1.08rem;
+            width: 100%;
+        }
+        .page-footer a {
+            color: #e57399;
+            transition: color 0.2s;
+        }
+        .page-footer a:hover {
+            color: #b71c4a;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
     <!-- Splash Screen -->
@@ -44,14 +127,14 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'method' %}">Contribute</a>
-                    </li>                   
-                    <li class="nav-item">
-                        <a class="btn btn-primary rounded ml-4" href="{% url 'admin_login' %}">Admin</a>
                     </li>
-                    <li>
+                    <li class="nav-item nav-btn-card">
+                        <a class="btn btn-admin" href="{% url 'admin_login' %}">Admin</a>
+                    </li>
+                    <li class="nav-btn-card">
                         <form method="post" action="{% url 'user_logout' %}" style="margin: 0;">
-                        {% csrf_token %}
-                        <button type="submit" style="background: none; border: none; color: black; cursor: pointer; padding: 20px;">Logout</button>
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-logout">Logout</button>
                         </form>
                     </li>
                 </ul>
