@@ -40,10 +40,185 @@
       border: none;
       cursor: pointer;
   }
+<<<<<<< HEAD
+=======
+  .float-group {
+      position: relative;
+      margin-bottom: 18px;
+  }
+  .float-group input {
+      width: 100%;
+      padding: 10px 10px 10px 10px;
+      border: 1px solid #bdbdbd;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+  }
+  .float-group label {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      background: transparent;
+      color: #888;
+      font-size: 1rem;
+      pointer-events: none;
+      transition: 0.2s;
+      padding: 0 4px;
+  }
+  .float-group input:focus + label,
+  .float-group input:not(:placeholder-shown) + label {
+      top: -10px;
+      left: 8px;
+      background: #f8f8ff;
+      color: #e57399;
+      font-size: 0.85rem;
+      font-weight: 600;
+  }
+  .admin-signin-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100vw;
+      background: none;
+      position: relative;
+  }
+  .admin-image-section {
+      flex: 1 1 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      background: #f8f8ff;
+      overflow: hidden;
+      height: 100vh;
+  }
+  .admin-bg-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.25; /* Adjust for subtlety */
+      pointer-events: none;
+  }
+  .admin-welcome-bg {
+      position: absolute;
+      top: 12%;      /* Move towards the top */
+      left: 2%;     /* Move towards the left */
+      width: 180px;    /* Reduced width */
+      height: 180px;   /* Reduced height */
+      transform: none; /* Remove centering */
+      z-index: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+      background: none;
+  }
+  .admin-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.85) blur(0.5px);
+      background: none; /* Remove any background color */
+  }
+  .admin-welcome-text {
+      position: absolute;
+      left: 50%;
+      top: 78%; /* Move near the bottom of the circular image */
+      transform: translate(-50%, 0);
+      z-index: 2;
+      color: #fff;
+      font-size: 2.2rem;
+      font-weight: bold;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.25);
+      letter-spacing: 1px;
+      background: rgba(231, 115, 153, 0.7);
+      padding: 12px 32px;
+      border-radius: 18px;
+      transition: top 0.6s cubic-bezier(.68,-0.55,.27,1.55);
+      pointer-events: none;
+  }
+  .admin-form-section {
+      flex: 0 0 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      padding: 60px 3vw 60px 2vw;
+      background: rgba(255,255,255,0.95);
+      min-width: 340px;
+      max-width: 440px;
+      height: 100vh;
+  }
+  .admin-notify-text {
+      font-size: 1.1rem;
+      color: #e57399;
+      font-weight: 600;
+      margin-bottom: 18px;
+      text-align: right;
+  }
+  #admin-login-form {
+      width: 320px;
+      background: rgba(100, 100, 255, 0.08);
+      padding: 28px 22px;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(231, 115, 153, 0.08);
+      margin-right: 0; /* Align closer to the right margin */
+      height: 100%;    /* Make the form fill the allocated vertical space */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
+  .admin-form-title {
+      font-size: 1.3rem;
+      color: #e57399;
+      font-weight: 700;
+      margin-bottom: 22px;
+      text-align: right;
+      letter-spacing: 0.5px;
+  }
+  .admin-form-title:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: -6px;
+      left: 0;
+      background: linear-gradient(to right, transparent, #e57399, transparent);
+  }
+
+  @media (max-width: 900px) {
+      .admin-signin-container {
+          flex-direction: column;
+      }
+      .admin-image-section, .admin-form-section {
+          flex: unset;
+          width: 100%;
+          min-width: unset;
+          padding: 24px 0;
+          height: auto;
+          max-width: unset;
+      }
+      .admin-form-section {
+          align-items: center;
+          padding: 24px 0;
+      }
+      #admin-login-form {
+          width: 95vw;
+          max-width: 340px;
+      }
+  }
+>>>>>>> 4820476 (U/I)
 </style>
 {% endblock %}
 
 {% block body %}
+<<<<<<< HEAD
 <h1>Admin Sign In</h1>
 
 
@@ -70,4 +245,58 @@
 </form>
 
 
+=======
+<div class="admin-signin-container">
+    <div class="admin-image-section">
+        <img src="{% static 'images/Gemini_Generated_Image_ihy7e5ihy7e5ihy7.png' %}" alt="Background Pattern" class="admin-bg-pattern">
+        <div class="admin-welcome-bg">
+            <img src="{% static 'images/article8.jpg' %}" alt="Admin Welcome" class="admin-bg-img">
+        </div>
+        <!-- Add id to the welcome text for JS control -->
+        <div class="admin-welcome-text" id="welcomeAdminText">Welcome Admin</div>
+    </div>
+    <div class="admin-form-section">
+        <form id="admin-login-form" method="POST" action="{% url 'admin_login' %}">
+            {% csrf_token %}
+            <div class="float-group">
+                <input type="text" id="first_name" name="first_name" required placeholder=" ">
+                <label for="first_name">First Name</label>
+            </div>
+            <div class="float-group">
+                <input type="password" id="password" name="password" required placeholder=" ">
+                <label for="password">Password</label>
+            </div>
+            <div class="float-group">
+                <input type="text" id="phone_number" name="phone_number" required placeholder=" ">
+                <label for="phone_number">Phone Number</label>
+            </div>
+            <div class="float-group">
+                <input type="text" id="name_of_chama" name="name_of_chama" required placeholder=" ">
+                <label for="name_of_chama">Name Of Chama</label>
+            </div>
+            <button type="submit" style="background-color: #e57399; color: #fff; border-radius: 18px;">Sign In</button>
+        </form>
+    </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const adminBtn = document.querySelector('.btn-admin');
+    const welcomeText = document.getElementById('welcomeAdminText');
+    let movedDown = false;
+
+    if (adminBtn && welcomeText) {
+        adminBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!movedDown) {
+                welcomeText.style.top = "60%";
+                movedDown = true;
+            } else {
+                welcomeText.style.top = "20%";
+                movedDown = false;
+            }
+        });
+    }
+});
+</script>
+>>>>>>> 4820476 (U/I)
 {% endblock %}
